@@ -7,7 +7,6 @@ from tortoise import Tortoise
 from tortoise.contrib.sanic import register_tortoise
 from settings import MyConfig
 from plugins.authorization.urls import authorization_bp
-from initial import init_rbac
 
 
 app = Sanic(__name__, log_config=MyConfig.LOGGING_CONFIG_DEFAULTS)
@@ -28,11 +27,6 @@ register_tortoise(
     },
     generate_schemas=True
 )
-
-@app.before_server_start
-async def init_data(app, _):
-    await init_rbac()
-    logger.info("data init finished")
 
 @app.after_server_stop
 async def close_db(app, _):
